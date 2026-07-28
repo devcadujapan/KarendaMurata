@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Calendário Escala · Times</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #d9cdb0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .card {
+      max-width: 1200px;
+      width: 100%;
+      background: #f6efe0;
+      border-radius: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      padding: 1.5rem 1.2rem 2rem;
+      transition: 0.2s;
+    }
+
+    /* cabeçalho */
+    .cabecalho {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #dccdb4;
+      padding-bottom: 0.8rem;
+      gap: 0.8rem;
+    }
+
+    .titulo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #3b2e1e;
+    }
+
+    .nav-meses {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #e7ddcc;
+      padding: 0.2rem 0.6rem 0.2rem 0.4rem;
+      border-radius: 60px;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .nav-meses button {
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 0.2rem;
+      color: #4d3e2a;
+      transition: 0.15s;
+      border-radius: 30px;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+    }
+
+    .nav-meses button:hover {
+      background: #cbbca5;
+      color: #1f160e;
+    }
+
+    .nav-meses span {
+      font-weight: 600;
+      font-size: 1rem;
+      min-width: 100px;
+      text-align: center;
+      color: #2f2416;
+    }
+
+    .legenda {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #2f2416;
+    }
+
+    .legenda span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .legenda i {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .cor-amarelo { background: #f9e25e; }
+    .cor-azul { background: #7bb3ff; }
+    .cor-verde { background: #74d68c; }
+    .cor-folga { background: #d0dae8; }
+
+    /* grid do calendário */
+    .grid-calendario {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 0.3rem;
+    }
+
+    .dia-semana {
+      font-weight: 600;
+      color: #3f3221;
+      background: #e7ddcc;
+      padding: 0.5rem 0.2rem;
+      text-align: center;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      letter-spacing: 0.2px;
+    }
+
+    .celula {
+      background: #fcf7ed;
+      border-radius: 18px;
+      padding: 0.4rem 0.15rem 0.3rem;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      border: 1px solid #dccdb4;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: 0.08s ease;
+    }
+
+    .celula.vazio {
+      background: transparent;
+      border: 1px dashed #cbbca5;
+      box-shadow: none;
+      min-height: 60px;
+    }
+
+    .numero-dia {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #2f2416;
+      background: rgba(255, 248, 235, 0.5);
+      padding: 0.05rem 0.5rem;
+      border-radius: 40px;
+      margin-bottom: 3px;
+    }
+
+    /* ----- BALÃO REDONDO com a cor de fundo ao redor do texto ----- */
+    .time-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      padding: 3px 8px;
+      border-radius: 40px;
+      width: 100%;
+      text-align: center;
+      margin-top: 2px;
+      line-height: 1.2;
+      border: 1px solid rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Cada time com seu balão redondo (fundo arredondado) */
+    .time-badge.time-amarelo{
+    background:#f9e25e;
+}
+
+.time-badge.time-azul{
+    background:#7bb3ff;
+}
+
+.time-badge.time-verde{
+    background:#74d68c;
+}
+
+/* Cor do nome do time */
+
+.time-badge.time-amarelo .nome-time{
+    color:#8B7500;
+    font-weight:800;
+}
+
+.time-badge.time-azul .nome-time{
+    color:#003b87;
+    font-weight:800;
+}
+
+.time-badge.time-verde .nome-time{
+    color:#006b2d;
+    font-weight:800;
+}
+
+/* Folga */
+
+.time-badge.time-folga{
+    background:#ece7dc;
+    border:1px solid #d7bcbc;
+}
+
+.time-badge.time-folga .texto-folga{
+    color:#d10000;
+    font-weight:800;
+}
+
+    /* rodapé */
+    .footer-info {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      background: #ede3d2;
+      padding: 0.8rem 1.5rem;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      color: #2f2416;
+      border: 1px solid #d4c3aa;
+      gap: 0.5rem;
+    }
+
+    .footer-info strong {
+      font-weight: 600;
+    }
+
+    .footer-info .atual {
+      background: #4d3e2a;
+      color: #faf0df;
+      padding: 0.2rem 1.2rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      text-align: center;
+    }
+
+    /* RESPONSIVO para celulares */
+    @media (max-width: 700px) {
+      .card { padding: 0.8rem; border-radius: 2rem; }
+      .cabecalho { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+      .titulo-area { flex-wrap: wrap; justify-content: space-between; }
+      h1 { font-size: 1.3rem; }
+      .nav-meses { align-self: flex-start; }
+      .nav-meses span { min-width: 70px; font-size: 0.85rem; }
+      .nav-meses button { font-size: 1.3rem; width: 1.8rem; height: 1.8rem; }
+      .legenda { gap: 0.4rem 0.8rem; font-size: 0.7rem; }
+      .legenda i { width: 14px; height: 14px; }
+
+      .grid-calendario { gap: 4px; }
+      .dia-semana { font-size: 0.65rem; padding: 0.3rem 0.1rem; border-radius: 12px; }
+      .celula { min-height: 70px; padding: 0.25rem 0.1rem 0.2rem; border-radius: 14px; }
+      .celula.vazio { min-height: 50px; }
+      .numero-dia { font-size: 0.8rem; padding: 0 0.3rem; }
+
+      .time-badge {
+        font-size: 0.5rem;
+        padding: 2px 5px;
+        gap: 3px;
+        border-radius: 30px;
+        white-space: nowrap;
+      }
+
+      .footer-info {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.6rem 1rem;
+        font-size: 0.75rem;
+      }
+      .footer-info .atual {
+        font-size: 0.65rem;
+        padding: 0.15rem 1rem;
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .celula { min-height: 60px; }
+      .time-badge { 
+        font-size: 0.45rem; 
+        padding: 1px 4px;
+        white-space: nowrap;
+      }
+      .numero-dia { font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="app">
+    <div class="cabecalho">
+      <div class="titulo-area">
+        <h1>📅 Escala</h1>
+        <div class="nav-meses">
+          <button id="btnMesAnterior" aria-label="Mês anterior">◀</button>
+          <span id="mesAnoLabel">Julho 2026</span>
+          <button id="btnMesSeguinte" aria-label="Próximo mês">▶</button>
+        </div>
+      </div>
+      <div class="legenda">
+        <span><i class="cor-amarelo"></i> Amarelo</span>
+        <span><i class="cor-azul"></i> Azul</span>
+        <span><i class="cor-verde"></i> Verde</span>
+        <span><i class="cor-folga"></i> Folga</span>
+      </div>
+    </div>
+
+    <div class="grid-calendario" id="calendarioGrid">
+      <!-- dias da semana fixos -->
+      <div class="dia-semana">Dom</div>
+      <div class="dia-semana">Seg</div>
+      <div class="dia-semana">Ter</div>
+      <div class="dia-semana">Qua</div>
+      <div class="dia-semana">Qui</div>
+      <div class="dia-semana">Sex</div>
+      <div class="dia-semana">Sáb</div>
+    </div>
+
+    <div class="footer-info">
+      <span><strong>Hoje:</strong> <span id="hojeInfo">28/07/2026 (Qua)</span></span>
+      <span class="atual" id="statusHoje">🔹 Verde: 4ª noite · Azul: 2º dia · Amarelo: 2ª folga</span>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // --------------------------------------------------------------
+      // DATA DE REFERÊNCIA E ESTADOS (fixos: 28/07/2026)
+      const DATA_REF = new Date(2026, 6, 28);
+      const estadoRef = {
+        amarelo: 5,   // 2ª folga (FOLGA)
+        azul: 1,      // 2º dia
+        verde: 9      // 4ª noite
+      };
+
+      const estadoExibicao = [
+        '1° DIA', '2° DIA', '3° DIA', '4° DIA',
+        'FOLGA', 'FOLGA',
+        '1° NOITE', '2° NOITE', '3° NOITE', '4° NOITE',
+        'FOLGA', 'FOLGA'
+      ];
+
+      function getClasseTime(time, estadoIdx) {
+
+    let classes = [];
+
+    // classe da cor do time
+    classes.push(`time-${time}`);
+
+    // adiciona folga quando necessário
+    if ((estadoIdx >= 4 && estadoIdx <= 5) ||
+        (estadoIdx >= 10 && estadoIdx <= 11)) {
+        classes.push("time-folga");
+    }
+
+    return classes.join(" ");
+}
+
+      function getEstadoExibicao(estadoIdx) {
+        return estadoExibicao[estadoIdx] || '';
+      }
+
+      function getEstadoNoDia(time, offset) {
+        let idx = (estadoRef[time] + offset) % 12;
+        if (idx < 0) idx += 12;
+        return idx;
+      }
+
+      // --------------------------------------------------------------
+      let anoAtual = 2026;
+      let mesAtual = 6;
+
+      const grid = document.getElementById('calendarioGrid');
+      const mesAnoLabel = document.getElementById('mesAnoLabel');
+      const hojeInfo = document.getElementById('hojeInfo');
+      const statusHoje = document.getElementById('statusHoje');
+
+      function renderizarCalendario() {
+        // Remove apenas as células de dias (mantém os 7 dias da semana)
+        while (grid.children.length > 7) {
+          grid.removeChild(grid.lastChild);
+        }
+
+        const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
+        const diasNoMes = new Date(anoAtual, mesAtual + 1, 0).getDate();
+        const refTime = DATA_REF.getTime();
+
+        // Preencher células vazias antes do primeiro dia
+        for (let i = 0; i < primeiroDia; i++) {
+          const empty = document.createElement('div');
+          empty.className = 'celula vazio';
+          grid.appendChild(empty);
+        }
+
+        // Preencher os dias do mês
+        for (let dia = 1; dia <= diasNoMes; dia++) {
+          const celula = document.createElement('div');
+          celula.className = 'celula';
+
+          // Número do dia
+          const numero = document.createElement('div');
+          numero.className = 'numero-dia';
+          numero.textContent = dia;
+          celula.appendChild(numero);
+
+          const dataAtual = new Date(anoAtual, mesAtual, dia);
+          const diffMs = dataAtual.getTime() - refTime;
+          const offset = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+          const times = ['amarelo', 'azul', 'verde'];
+          const cores = ['AMARELO', 'AZUL', 'VERDE'];
+
+          times.forEach((time, idx) => {
+            const estadoIdx = getEstadoNoDia(time, offset);
+            const classe = getClasseTime(time, estadoIdx);
+            const exibicao = getEstadoExibicao(estadoIdx);
+            const rotulo = cores[idx];
+
+            const badge = document.createElement('div');
+            badge.className = `time-badge ${classe}`;
+
+            // Nome do time com a cor correspondente
+            const nomeSpan = document.createElement('span');
+            nomeSpan.className = 'nome-time';
+            nomeSpan.textContent = rotulo;
+            badge.appendChild(nomeSpan);
+
+            // Espaço
+            badge.appendChild(document.createTextNode(' '));
+
+            // Estado (FOLGA ou dia/noite)
+            const estadoSpan = document.createElement('span');
+            if (exibicao === 'FOLGA') {
+              estadoSpan.className = 'texto-folga';
+              estadoSpan.textContent = exibicao;
+            } else {
+              estadoSpan.textContent = exibicao;
+            }
+            badge.appendChild(estadoSpan);
+
+            celula.appendChild(badge);
+          });
+
+          grid.appendChild(celula);
+        }
+
+        // Atualizar label do mês
+        const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+        mesAnoLabel.textContent = `${meses[mesAtual]} ${anoAtual}`;
+
+        // Informações do dia atual (28/07/2026)
+        hojeInfo.textContent = '28/07/2026 (Quarta-feira)';
+
+        const estadoV = estadoRef.verde;
+        const estadoA = estadoRef.azul;
+        const estadoAm = estadoRef.amarelo;
+
+        const exV = getEstadoExibicao(estadoV);
+        const exA = getEstadoExibicao(estadoA);
+        const exAm = getEstadoExibicao(estadoAm);
+
+        statusHoje.textContent = `🔹 Verde: ${exV} · Azul: ${exA} · Amarelo: ${exAm}`;
+      }
+
+      // Eventos de navegação
+      document.getElementById('btnMesAnterior').addEventListener('click', () => {
+        if (mesAtual === 0) {
+          mesAtual = 11;
+          anoAtual--;
+        } else {
+          mesAtual--;
+        }
+        renderizarCalendario();
+      });
+
+      document.getElementById('btnMesSeguinte').addEventListener('click', () => {
+        if (mesAtual === 11) {
+          mesAtual = 0;
+          anoAtual++;
+        } else {
+          mesAtual++;
+        }
+        renderizarCalendario();
+      });
+
+      // Renderização inicial
+      renderizarCalendario();
+    })();
+  </script>
+</body>
+</html>
