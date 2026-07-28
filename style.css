@@ -417,3 +417,32 @@ h1 {
         font-size: 0.7rem;
     }
 }
+
+/* Créditos */
+
+.footer-creditos{
+    width:100%;
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid #d4c3aa;
+
+    text-align:center;
+
+    font-size:.80rem;
+
+    color:#5b4b38;
+
+    line-height:1.6;
+}
+
+.footer-creditos a{
+    color:#2f2416;
+    font-weight:700;
+    text-decoration:none;
+    transition:.25s;
+}
+
+.footer-creditos a:hover{
+    color:#0b65c2;
+    text-decoration:underline;
+}
