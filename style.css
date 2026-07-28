@@ -1,0 +1,419 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+    background:linear-gradient(
+        180deg,
+        #d9cdb0,
+        #ccb996);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.card {
+    max-width: 1200px;
+    width: 100%;
+    background: #f6efe0;
+    border-radius: 2.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    padding: 1.5rem 1.2rem 2rem;
+    transition: 0.30s;
+}
+
+/* cabeçalho */
+.cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #dccdb4;
+    padding-bottom: 0.8rem;
+    gap: 0.8rem;
+}
+
+.titulo-area {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #3b2e1e;
+}
+
+.nav-meses {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #e7ddcc;
+    padding: 0.2rem 0.6rem 0.2rem 0.4rem;
+    border-radius: 60px;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.nav-meses button {
+    background: transparent;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.2rem;
+    color: #4d3e2a;
+    transition: 0.15s;
+    border-radius: 30px;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.nav-meses button:hover {
+    background: #cbbca5;
+    color: #1f160e;
+}
+
+.nav-meses span {
+    font-weight: 600;
+    font-size: 1rem;
+    min-width: 100px;
+    text-align: center;
+    color: #2f2416;
+}
+
+.legenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #2f2416;
+}
+
+.legenda span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.legenda i {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cor-amarelo {
+    background: #f9e25e;
+}
+
+.cor-azul {
+    background: #7bb3ff;
+}
+
+.cor-verde {
+    background: #74d68c;
+}
+
+.cor-folga {
+    background: #d0dae8;
+}
+
+.calendario-scroll{
+    width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding-bottom:8px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+}
+
+.calendario-scroll::-webkit-scrollbar{
+    height:8px;
+}
+
+.calendario-scroll::-webkit-scrollbar-thumb{
+    background:#b7a58b;
+    border-radius:20px;
+}
+
+/* grid do calendário */
+.grid-calendario{
+    display:grid;
+    grid-template-columns:repeat(7,minmax(150px,1fr));
+    gap:6px;
+    margin-top:.3rem;
+    min-width:1050px;
+}
+
+.dia-semana {
+    font-weight: 600;
+    color: #3f3221;
+    background: #e7ddcc;
+    padding: 0.5rem 0.2rem;
+    text-align: center;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    letter-spacing: 0.2px;
+}
+
+.celula {
+    background: #fcf7ed;
+    border-radius: 18px;
+    padding: 0.4rem 0.15rem 0.3rem;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px solid #dccdb4;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    transition: 0.25s;
+}
+
+.celula.vazio {
+    background: transparent;
+    border: 1px dashed #cbbca5;
+    box-shadow: none;
+    min-height: 60px;
+}
+
+.celula.hoje .numero-dia{
+    background:#d18b00;
+    color:#fff;
+}
+
+.numero-dia {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #2f2416;
+    background: rgba(255, 248, 235, 0.5);
+    padding: 0.05rem 0.5rem;
+    border-radius: 40px;
+    margin-bottom: 3px;
+}
+
+/* ----- BALÃO REDONDO com a cor de fundo ao redor do texto ----- */
+.time-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    padding: 3px 8px;
+    border-radius: 40px;
+    width: 100%;
+    text-align: center;
+    margin-top: 2px;
+    line-height: 1.2;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    white-space:normal;
+    text-align:center;
+    flex-wrap:wrap;
+    line-height:1.15;
+    min-height:34px;
+    overflow: hidden;
+}
+
+/* Cada time com seu balão redondo (fundo arredondado) */
+.time-badge.time-amarelo {
+    background: #f9e25e;
+}
+
+.time-badge.time-azul {
+    background: #7bb3ff;
+}
+
+.time-badge.time-verde {
+    background: #74d68c;
+}
+
+/* Cor do nome do time */
+.time-badge.time-amarelo .nome-time {
+    color: #8B7500;
+    font-weight: 800;
+}
+
+.time-badge.time-azul .nome-time {
+    color: #003b87;
+    font-weight: 800;
+}
+
+.time-badge.time-verde .nome-time {
+    color: #006b2d;
+    font-weight: 800;
+}
+
+/* Folga */
+.time-badge.time-folga {
+    background: #ece7dc;
+    border: 1px solid #d7bcbc;
+}
+
+.time-badge.time-folga .texto-folga {
+    color: #d10000;
+    font-weight: 800;
+}
+
+/* rodapé */
+.footer-info{
+    margin-top:1.5rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:16px 20px;
+    border-radius:20px;
+    background:#ede3d2;
+    border:1px solid #d4c3aa;
+    flex-wrap:wrap;
+}
+
+.footer-info strong {
+    font-weight: 600;
+}
+
+.footer-info .atual{
+    background:#4d3e2a;
+    color:white;
+    padding:8px 16px;
+    border-radius:30px;
+    font-size:.85rem;
+    font-weight:600;
+}
+
+/* RESPONSIVO para celulares */
+@media (max-width: 700px) {
+    .card {
+        padding: 0.8rem;
+        border-radius: 2rem;
+    }
+    .cabecalho {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    .titulo-area {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    h1 {
+        font-size: 1.3rem;
+    }
+    .nav-meses {
+        align-self: flex-start;
+    }
+    .nav-meses span {
+        min-width: 70px;
+        font-size: 0.85rem;
+    }
+    .nav-meses button{
+        width:44px;
+        height:44px;
+        font-size:24px;
+    }
+    .legenda {
+        gap: 0.4rem 0.8rem;
+        font-size: 0.7rem;
+    }
+    .legenda i {
+        width: 14px;
+        height: 14px;
+    }
+
+    .dia-semana {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.1rem;
+        border-radius: 12px;
+    }
+    .celula {
+        min-height: 70px;
+        padding: 0.25rem 0.1rem 0.2rem;
+        border-radius: 14px;
+    }
+    .celula.vazio {
+        min-height: 50px;
+    }
+    .numero-dia {
+        font-size: 0.8rem;
+        padding: 0 0.3rem;
+    }
+
+    .time-badge{
+        font-size:.60rem;
+        font-weight:700;
+        border-radius:40px;
+        padding:4px 6px;
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:4px;
+        flex-wrap:wrap;
+        text-align:center;
+        line-height:1.15;
+    }
+
+    .footer-info {
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+    }
+    .footer-info .atual {
+        font-size: 0.65rem;
+        padding: 0.15rem 1rem;
+        width: 100%;
+        text-align: center;
+    }
+}
+    .celula.hoje{
+        background:#fff6d6;
+        border:3px solid #d38b00;
+    }
+
+    .celula.hoje .numero-dia{
+        background:#d38b00;
+        color:white;
+    }
+
+    .grid-calendario{
+        gap:5px;
+        min-width:840px;
+    }
+
+@media (hover:hover){
+    .celula:hover{
+        transform:translateY(-3px);
+    }
+}
+
+@media (max-width: 480px) {
+    .celula {
+        min-height: 60px;
+    }
+    .time-badge {
+        font-size:.58rem;
+        min-height:34px;
+        padding: 1px 4px;
+        white-space: normal;
+    }
+    .numero-dia {
+        font-size: 0.7rem;
+    }
+}
