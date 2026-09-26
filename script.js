@@ -74,8 +74,9 @@
   }
 
   // --------------------------------------------------------------
-  let anoAtual = 2026;
-  let mesAtual = 6;
+  const hojeInicial = new Date();
+  let anoAtual = hojeInicial.getFullYear();
+  let mesAtual = hojeInicial.getMonth();
 
   const grid = document.getElementById('calendarioGrid');
   const mesAnoLabel = document.getElementById('mesAnoLabel');
@@ -98,23 +99,6 @@
       empty.className = 'celula vazio';
       grid.appendChild(empty);
     }
-
-    const hoje = new Date();
-    for (let dia = 1; dia <= diasNoMes; dia++) {
-
-    const celula = document.createElement('div');
-    celula.className = 'celula';
-
-    if (
-        dia === hoje.getDate() &&
-        mesAtual === hoje.getMonth() &&
-        anoAtual === hoje.getFullYear()
-    ) {
-        celula.classList.add("hoje");
-    }
-
-    // restante do código...
-}
 
     // Preencher os dias do mês
     for (let dia = 1; dia <= diasNoMes; dia++) {
